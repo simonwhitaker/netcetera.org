@@ -94,10 +94,10 @@
 
     function handleClick(buttonNumber) {
       if (buttonNumber === answerIndex) {
-        document.getElementById('feedback').innerHTML = "Correct!";
+        document.getElementById('message').innerHTML = "Correct!";
         score++;
       } else {
-        document.getElementById('feedback').innerHTML = "Wrong!";
+        document.getElementById('message').innerHTML = "Wrong!";
         score = 0;
       }
       document.getElementById('score').innerHTML = score;
@@ -127,7 +127,7 @@
         }
       }
 
-      document.getElementById('feedback').innerHTML = '';
+      document.getElementById('message').innerHTML = '';
 
       const buttonsWrapper = document.getElementById('buttons');
       buttonsWrapper.innerHTML = '';
@@ -162,7 +162,7 @@
       <img id="hourHand" src="hour-hand.png" />
     </div>
     <div id="buttons"></div>
-    <div id="feedback"></div>
+    <div id="message"></div>
   </div>
 </body>
 </html>
