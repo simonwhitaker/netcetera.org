@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tell the Time</title>
+  <style>
+    * {
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    }
+    body {
+      width: 384px;
+      text-align: center;
+      margin: 0 auto;
+    }
+    #root {
+      width: 100%;
+      position: relative;
+    }
+    #clock {
+      position: relative;
+      width: 100%;
+      padding-bottom: 100%;
+      pointer-events: none;
+    }
+    #clock > img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      pointer-events: none;
+    }
+    #buttons {
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+    #scoreContainer {
+      font-size: x-large;
+      padding-bottom: 20px;
+    }
+    #score {
+      font-weight: 700;
+    }
+    .answerButton {
+      font-size: large;
+      margin: 5px;
+    }
+    @media only screen and (max-width: 480px) {
+      body {
+        width: 100%;
+      }
+      #clock {
+        width: 70%;
+        padding-bottom: 70%;
+        margin: 0 auto;
+      }
+      #clock > img {
+        width: 100%;
+      }
+      #scoreContainer {
+        padding-bottom: 10px;
+      }
+      .blurb {
+        margin: 10px 0;
+      }
+      h1 {
+        margin-bottom: 0.5rem;
+      }
+    }
+  </style>
+  <script>
+    var answerIndex = -1;
+    var score = 0;
+
+    function timeAsHumanString(t) {
+      if (t.minute === 0) {
+        return `${t.hour} o'clock`;
+      }
+      const pastTo = t.minute > 30 ? 'to' : 'past';
+      const hour = t.minute > 30 ? (t.hour % 12) + 1 : t.hour;
+      var minutes = t.minute > 30 ? 60 - t.minute : t.minute;
+      if (minutes === 15) {
+        minutes = 'quarter';
+      } else if (minutes === 30) {
+        minutes = 'half';
+      }
+      return `${minutes} ${pastTo} ${hour}`;
+    }
+
+    function timeAsDecimalString(t) {
+      return `${t.hour}:${t.minute < 10 ? '0' : ''}${t.minute}`;
+    }
+
+    function handleClick(buttonNumber) {
+      if (buttonNumber === answerIndex) {
+        document.getElementById('feedback').innerHTML = "Correct!";
+        score++;
+      } else {
+        document.getElementById('feedback').innerHTML = "Wrong!";
+        score = 0;
+      }
+      document.getElementById('score').innerHTML = score;
+      const buttons = document.getElementsByClassName('answerButton');
+      for (i = 0; i < buttons.length; i++) {
+        buttons[i].disabled = true;
+        buttons[i].style.color = i === answerIndex ? 'green' : 'red';
+      }
+      setTimeout(() => {
+        randomise();
+      }, 1000);
+    }
+
+    function randomTime() {
+      const hour = Math.floor(Math.random() * 12) + 1;
+      const minute = Math.floor(Math.random() * 12) * 5;
+      return { hour, minute };
+    }
+
+    function randomise() {
+      const randomTimes = [];
+      var numberOfOptions = Math.min(4 + Math.floor(score/10), 8);
+      while (randomTimes.length < numberOfOptions) {
+        const t = randomTime();
+        if (randomTimes.findIndex(rt => rt.hour === t.hour && rt.minute == t.minute) < 0) {
+          randomTimes.push(t);
+        }
+      }
+
+      document.getElementById('feedback').innerHTML = '';
+
+      const buttonsWrapper = document.getElementById('buttons');
+      buttonsWrapper.innerHTML = '';
+
+      const buttons = randomTimes.map((t, index) => {
+        const button = document.createElement('button');
+        button.className = 'answerButton';
+        button.onclick = () => handleClick(index);
+        button.innerHTML = timeAsHumanString(t);
+        button.disabled = false;
+        button.style.color = 'black';
+        buttonsWrapper.appendChild(button);
+      })
+
+      answerIndex = Math.floor(Math.random() * 4);
+      const answer = randomTimes[answerIndex];
+      const minuteAngle = answer.minute * 6;
+      const hourAngle = answer.hour*30 + answer.minute/2;
+      document.getElementById('hourHand').style.transform = `rotateZ(${hourAngle}deg)`;
+      document.getElementById('minuteHand').style.transform = `rotateZ(${minuteAngle}deg)`;
+    }
+  </script>
+</head>
+<body onload="randomise()">
+  <div id="root">
+    <h1>What time is it?</h1>
+    <p class="blurb">How high can you score? One wrong answer sets the score back to zero!!</p>
+    <div id="scoreContainer">Score: <span id="score">0</span></div>
+    <div id="clock">
+      <img id="clockFace" src="clock-face.png"/>
+      <img id="minuteHand" src="minute-hand.png" />
+      <img id="hourHand" src="hour-hand.png" />
+    </div>
+    <div id="buttons"></div>
+    <div id="feedback"></div>
+  </div>
+</body>
+</html>

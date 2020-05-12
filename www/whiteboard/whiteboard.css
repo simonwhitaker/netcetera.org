@@ -1,0 +1,45 @@
+* {
+    font-family: helvetica, arial, sans-serif;
+    font-size: 12px;
+}
+
+body {
+    background-color: gray;
+    margin: 0px;
+    padding: 0px;
+}
+
+#canvas {
+    background-color: white;
+}
+
+#toolbar {
+    position: relative;
+    background-color: #ccc;
+    padding: 14px;
+    height: 12px;
+    border-bottom: 1px solid gray;
+}
+
+.well {
+    padding: 0px;
+    margin: 0px;
+    height: 12px;
+    width: 12px;
+}
+
+.toolbar_button {
+    padding: 3px 0px;
+    margin: 0px 2px;
+    border-width: 0px 0px 2px 0px;
+    border-style: solid;
+    border-color: transparent;
+}
+
+#rendered_image {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    border-left: 1px solid gray;
+    display: none;
+}

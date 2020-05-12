@@ -1,0 +1,56 @@
+body {
+    font-family: "Helvetica", "Arial", sans-serif;
+    line-height: 1.3em;
+    margin: 50px auto;
+    max-width: 960px;
+}
+
+p, div, span, td, th {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+
+#mugshot {
+    float: left;
+    width: 200px;
+    padding: 60px 30px;
+}
+
+#mugshot img {
+    width: 200px;
+}
+
+#content {
+    max-width: 700px;
+    margin-left: 260px;
+}
+
+#footer {
+    margin-left: 260px;
+}
+
+#footer p {
+    font-size: 12px;
+    color: #888;
+}
+
+a   { color: #A20001; }
+h1, h2 { 
+    color: #FD1100; 
+}
+
+.smallprint {
+    font-size: 11px;
+    color: #666;
+}
+
+.code {
+	padding: 10px;
+	background-color: #d8d8d8;
+	border: 1px solid #bbb;
+}
+
+li {
+    margin-bottom: 3px;
+}

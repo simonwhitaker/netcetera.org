@@ -1,0 +1,190 @@
+<html>
+<head>
+    <title>What does Bane sound like?</title>
+    <script type="text/javascript">
+
+    var quoteData = [
+        {
+            'quote': 'Like Darth Vader shouting, while playing a bass accordion through a Harley Davidson exhaust pipe',
+            'attrib': {
+                'text': 'Peter Bradshaw, The Guardian',
+                'url': 'http://www.guardian.co.uk/film/2012/jul/19/the-dark-knight-rises-review?newsfeed=true'
+            }
+        },
+        {
+            'quote': 'Like Sir Ian McKellen gargling meths in a wind tunnel',
+            'attrib': {
+                'text': 'Nev Pierce, Empire Magazine',
+                'url': 'http://www.empireonline.com/reviews/reviewcomplete.asp?FID=137000'
+            }
+        },
+        {
+            'quote': 'Like a drunk Furby',
+            'attrib': {
+                'text': 'Catherine Bray, Film4',
+                'url': 'http://www.film4.com/reviews/2012/the-dark-knight-rises'
+            }
+        },
+        {
+            'quote': '[Like] an imitation of Sir Ian McKellen doing Patrick Stewart',
+            'attrib': {
+                'text': 'Tom Charity, CNN',
+                'url': 'http://edition.cnn.com/2012/07/19/showbiz/movies/dark-knight-rises-review-charity/index.html'
+            }
+        },
+        {
+            'quote': 'A thundering if musical wheeze',
+            'attrib': {
+                'text': 'Bruce Handy, Vanity Fair',
+                'url': 'http://www.vanityfair.com/online/daily/2012/07/dark-knight-rises-review'
+            }
+        },
+        {
+            'quote': 'His fruity, magniloquent purr is closer to Vincent Price talking through a window fan.',
+            'attrib': {
+                'text': 'Nick Pinkerton, The Village Voice',
+                'url': 'http://www.villagevoice.com/2012-07-18/film/why-so-serious/'
+            }
+        },
+        {
+            'quote': 'Like a 007 villain',
+            'attrib': {
+                'text': 'Richard Corliss, Time',
+                'url': 'http://entertainment.time.com/2012/07/16/times-review-of-the-dark-knight-rises-to-the-depths-to-the-heights/'
+            }
+        },
+        {
+            'quote': 'I am slightly concerned about Nolan\'s decision to record all of Bane\'s dialogue on one of those little pens with a built in microphone',
+            'attrib': {
+                'text': 'Ultra Culture',
+                'url': 'http://www.ultraculture.co.uk/11610-a-largely-pointless-breakdown-of-the-dark-knight-rises-trailer.htm'
+            }
+        },
+        {
+            'quote': '[He has a] Vader-ish wheeze in his voice',
+            'attrib': {
+                'text': 'Robbie Collin, The Telegraph',
+                'url': 'http://www.telegraph.co.uk/culture/film/filmreviews/9412391/The-Dark-Knight-Rises-a-comprehensive-review.html'
+            }
+        },
+        {
+            'quote': 'Like Marlon Brando, down a well-shaft, gargling from a jerry-can',
+            'attrib': {
+                'text': 'Xan Brooks, The Guardian',
+                'url': 'http://www.guardian.co.uk/film/2012/jul/16/the-dark-knight-rises-first-review'
+            }
+        }
+    ];
+
+    var currentIndex = 0;
+
+    function updateQuote() {
+        var data = quoteData[currentIndex];
+        document.getElementById('quote').innerHTML = data['quote'];
+        var a = document.getElementById('attrib-link');
+        a.setAttribute('href', data['attrib']['url']);
+        a.innerHTML = data['attrib']['text'];
+    }
+
+    function randomQuote () {
+        currentIndex = Math.floor(Math.random() * quoteData.length);
+        updateQuote();
+    }
+
+    function nextQuote () {
+        currentIndex += 1;
+        if (currentIndex >= quoteData.length)
+            currentIndex = 0;
+        updateQuote();
+    }
+
+
+    </script>
+    <link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200|Oswald:300,400' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+        body {
+        }
+        #content {
+            position: relative;
+            width: 600px;
+            margin: 60px auto;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 300;
+        }
+        h1 {
+            font-weight: 400;
+            font-size: 48px;
+            margin: 40px 0;
+        }
+        #quote-container {
+            margin: 0 0 40px 0;
+            font-size: 48px;
+        }
+        #attrib, a {
+        }
+
+        a {
+            text-decoration: none;
+            color: #c00;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #attrib {
+            display: inline;
+        }
+        #left-quote {
+            position: absolute;
+            left: -20px;
+            width: 20px;
+            text-align: right;
+        }
+        p {
+            font-family: "Yanone Kaffeesatz";
+            font-weight: 200;
+            font-size: 22px;
+        }
+        .smallprint {
+            color: #666;
+            font-size: 16px;
+        }
+        #footnote {
+            text-align: right;
+        }
+    </style>
+        <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-33163492-1']);
+        _gaq.push(['_setDomainName', 'netcetera.org']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</head>
+<body onload="randomQuote()">
+    <div id="content">
+        <p>If you've seen The Dark Knight Rises, even just the trailer, you'll know Bane has a rather
+            distinctive voice. Critics are falling over themselves to come up with the best 
+            description. So we ask...</p>
+        <h1>What does Bane sound like?</h1>
+        <div id="quote-container">
+            <span id="left-quote">&ldquo;</span><span id="quote">Quote goes here</span>&rdquo;
+            <div id="attrib">
+                <a id="attrib-link" href="">Attribution</a>
+            </div>
+        </div>
+        <p id="footnote">
+            <a href="#" onclick="nextQuote(); return false">Next</a> | 
+            Found another? <a href="http://twitter.com/s1mn">Tweet me</a>
+        </p>
+        <p class="smallprint">
+            Warning: reviews may contain spoilers. Read at your own risk.
+        </p>
+    </div>
+</body>
+</html>

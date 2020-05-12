@@ -1,0 +1,302 @@
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>netcetera: CAMediaTimingFunction playground</title>
+  <style type="text/css" media="screen">
+    @import url("netcetera.css");
+    #maincanvas {
+      background-color: #fff;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+    input {
+      border: 1px solid #333;
+      width: 40px;
+    }
+    #cp1_x, #cp1_y {
+      border: 1px solid red;
+    }
+    #cp2_x, #cp2_y {
+      border: 1px solid blue;
+    }
+  </style>
+  <script type="text/javascript" charset="utf-8">
+    var start_x = 0.0;
+    var start_y = 0.0;
+    var cp1_x = 0.3;
+    var cp1_y = 0.1;
+    var cp2_x = 0.25;
+    var cp2_y = 0.77;
+    var end_x = 1.0;
+    var end_y = 1.0;
+
+    var CA_MEDIA_FUNCTIONS = {
+      'kCAMediaTimingFunctionDefault': [0.25, 0.10, 0.25, 1.00],
+      'kCAMediaTimingFunctionEaseIn': [0.42, 0.00, 1.00, 1.00],
+      'kCAMediaTimingFunctionEaseOut': [0.00, 0.00, 0.58, 1.00],
+      'kCAMediaTimingFunctionEaseInEaseOut': [0.42, 0.00, 0.58, 1.00],
+      'kCAMediaTimingFunctionLinear': [0.00, 0.00, 1.00, 1.00],
+    };
+
+    var GRAPH_PADDING = 20;
+    var GRAB_HANDLE_RADIUS = 0.015;
+
+    var GRAB_HANDLE_NONE = 0;
+    var GRAB_HANDLE_CP1 = 1;
+    var GRAB_HANDLE_CP2 = 2;
+
+    var active_grab_handle = GRAB_HANDLE_NONE;
+    var is_dragging = false;
+
+    function handleTextInput () {
+      cp1_x   = parseFloat(document.getElementById('cp1_x').value);
+      cp1_y   = parseFloat(document.getElementById('cp1_y').value);
+      cp2_x   = parseFloat(document.getElementById('cp2_x').value);
+      cp2_y   = parseFloat(document.getElementById('cp2_y').value);
+      drawCurve();
+    }
+
+    function drawCurve(constantName){
+      document.getElementById('cp1_x').value = cp1_x.toFixed(2);
+      document.getElementById('cp1_y').value = cp1_y.toFixed(2);
+      document.getElementById('cp2_x').value = cp2_x.toFixed(2);
+      document.getElementById('cp2_y').value = cp2_y.toFixed(2);
+
+      var ctor = document.getElementById('ctor');
+      var ctor_str;
+      if (constantName) {
+        ctor_str = "[CAMediaTimingFunction functionWithName:" + constantName + "]";
+      } else {
+        ctor_str  = '[CAMediaTimingFunction functionWithControlPoints:' + cp1_x.toFixed(2)
+                  + ' :' + cp1_y.toFixed(2)
+                  + ' :' + cp2_x.toFixed(2)
+                  + ' :' + cp2_y.toFixed(2)
+                  + ']';
+      }
+      ctor.innerHTML = ctor_str;
+
+      // get the canvas element using the DOM
+      var canvas = document.getElementById('maincanvas');
+      var graph_width = canvas.width - GRAPH_PADDING * 2;
+      var graph_height = canvas.height - GRAPH_PADDING * 2;
+
+      // Make sure we don't execute when canvas isn't supported
+      if (canvas.getContext) {
+
+        // use getContext to use the canvas for drawing
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,canvas.width, canvas.height);
+
+        ctx.save()
+
+        // transform the canvas to
+        // a) add padding around the graph
+        // b) make the origin bottom left rather than top left
+        ctx.translate(GRAPH_PADDING, GRAPH_PADDING + graph_height);
+        ctx.scale(1, -1);
+
+        // draw grid
+        ctx.strokeStyle = "#666";
+        ctx.lineWidth = 0.25;
+        for (var i = 0; i <= 10; i++) {
+            x = graph_width / 10 * i;
+            y = graph_height / 10 * i;
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(graph_width, y);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, graph_height);
+            ctx.stroke();
+        }
+
+        ctx.scale(graph_width, graph_height);
+
+        ctx.lineWidth = 1/300;
+
+        // draw bezier handles
+        // control point 1
+        ctx.strokeStyle = "red";
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.moveTo(start_x, start_y);
+        ctx.lineTo(cp1_x, cp1_y);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(cp1_x, cp1_y, GRAB_HANDLE_RADIUS, 0, Math.PI*2, true);
+        ctx.fill();
+        ctx.stroke();
+
+        // control point 2
+        ctx.strokeStyle = "blue";
+        ctx.beginPath();
+        ctx.moveTo(end_x, end_y);
+        ctx.lineTo(cp2_x, cp2_y);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(cp2_x, cp2_y, GRAB_HANDLE_RADIUS, 0, Math.PI*2, true);
+        ctx.fill();
+        ctx.stroke();
+
+
+        // draw curve
+        ctx.strokeStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(start_x, start_y);
+        ctx.bezierCurveTo(cp1_x, cp1_y, cp2_x, cp2_y, end_x, end_y);
+        ctx.stroke();
+
+        // call restore to undo the translation
+        ctx.restore();
+
+      } else {
+        alert('You need Safari, Chrome or Firefox 1.5+ to see this demo.');
+      }
+    }
+
+    function distanceBetweenPoints(x1, y1, x2, y2) {
+      x_diff = x1 - x2;
+      y_diff = y1 - y2;
+      return Math.sqrt((x_diff * x_diff) + (y_diff * y_diff))
+    }
+
+    function getMouseLocation(e) {
+      var target = e.target;
+      var x_factor = target.width / target.clientWidth;
+      var y_factor = target.height / target.clientHeight;
+
+      var offset_left = 0;
+      var offset_top  = 0;
+      var obj = target;
+
+      while (obj.offsetParent) {
+        offset_left += obj.offsetLeft;
+        offset_top  += obj.offsetTop;
+        obj = obj.offsetParent;
+      }
+
+      coords = [(e.pageX - offset_left) * x_factor, (e.pageY - offset_top) * y_factor];
+      return coords;
+    }
+
+    function getMouseLocationOnGraph(e) {
+      var coords = getMouseLocation(e);
+
+      var canvas = document.getElementById('maincanvas');
+      var graph_width = canvas.width - GRAPH_PADDING * 2;
+      var graph_height = canvas.height - GRAPH_PADDING * 2;
+      var x = (coords[0] - GRAPH_PADDING) / graph_width;
+      var y = 1 - (coords[1] - GRAPH_PADDING) / graph_height;
+
+      if (x < 0.0)
+        x = 0.0;
+      if (x > 1.0)
+        x = 1.0;
+      if (y < 0.0)
+        y = 0.0;
+      if (y > 1.0)
+        y = 1.0;
+
+      return [x, y]
+    }
+
+    function handleMouseMove(e) {
+      coords = getMouseLocationOnGraph(e);
+      x = coords[0];
+      y = coords[1];
+
+      if (is_dragging) {
+        document.body.style.cursor = "move";
+        if (active_grab_handle == GRAB_HANDLE_CP1) {
+          cp1_x = x;
+          cp1_y = y;
+          drawCurve();
+        } else if (active_grab_handle == GRAB_HANDLE_CP2) {
+          cp2_x = x;
+          cp2_y = y;
+          drawCurve();
+        }
+        document.body.style.cursor = "move";
+      } else {
+        // give some extra error
+        grab_radius = GRAB_HANDLE_RADIUS * 1.5;
+        if (distanceBetweenPoints(x, y, cp2_x, cp2_y) < grab_radius) {
+          document.body.style.cursor = "move";
+          active_grab_handle = GRAB_HANDLE_CP2;
+        } else if (distanceBetweenPoints(x, y, cp1_x, cp1_y) < grab_radius) {
+          document.body.style.cursor = "move";
+          active_grab_handle = GRAB_HANDLE_CP1;
+        } else {
+          document.body.style.cursor = "default";
+          active_grab_handle = GRAB_HANDLE_NONE;
+        }
+      }
+    }
+
+    function handleMouseDown(e) {
+      is_dragging = active_grab_handle > GRAB_HANDLE_NONE;
+    }
+
+    function handleMouseUp(e) {
+      is_dragging = false;
+    }
+
+    function showCAFunction(e, name) {
+      var coords = CA_MEDIA_FUNCTIONS[name];
+      cp1_x = coords[0];
+      cp1_y = coords[1];
+      cp2_x = coords[2];
+      cp2_y = coords[3];
+      drawCurve(name);
+    }
+  </script>
+  <link rel="icon" type="image/png" href="/favicon.png">
+</head>
+<body onload="showCAFunction(event, 'kCAMediaTimingFunctionDefault')" onmouseup="handleMouseUp(event)">
+    <div id="main">
+        <p><a href="/">Home</a></p>
+      <h1>CAMediaTimingFunction playground</h1>
+        <p class="news">Now also available as a free <a href="http://github.com/simonwhitaker/tween-o-matic">native OS X app</a>!</p>
+
+        <canvas id="maincanvas" width="320" height="320" onmousemove="handleMouseMove(event)" onmousedown="handleMouseDown(event)"></canvas>
+
+        <table border="0" cellspacing="0" cellpadding="2">
+          <tr><th></th><th>x</th><th>y</th></tr>
+          <tr>
+            <td>Control point 1</td>
+            <td><input type="text" name="cp1_x" id="cp1_x" size="3" value="0.3" onchange="handleTextInput()" /></td>
+            <td><input type="text" name="cp1_y" id="cp1_y" size="3" value="0.05" onchange="handleTextInput()" /></td>
+          </tr>
+          <tr>
+            <td>Control point 2</td>
+            <td><input type="text" name="cp2_x" id="cp2_x" size="3" value="0.2" onchange="handleTextInput()" /></td>
+            <td><input type="text" name="cp2_y" id="cp2_y" size="3" value="0.7" onchange="handleTextInput()" /></td>
+          </tr>
+        </table>
+
+        <h2>Constants</h2>
+        <ul>
+          <script type="text/javascript" charset="utf-8">
+            for (var key in CA_MEDIA_FUNCTIONS) {
+              document.write('<li><a href="javascript:void(0)" onclick="showCAFunction(event, \'' + key + '\')">' + key + '</a></li>');
+            }
+          </script>
+        </ul>
+        <h2>Constructor</h2>
+        <pre id="ctor" class="code">&nbsp;</pre>
+
+      <div id="blurb">
+        <h2>Instructions</h2>
+        <p>Drag the control points around to see how the timing curve changes.</p>
+        <h2>Postscript</h2>
+        <p>I couldn't find the values for the various constants documented anywhere (apart from kCAMediaTimingFunctionDefault, which is documented incorrectly <a href="http://developer.apple.com/mac/library/DOCUMENTATION/Cocoa/Reference/CAMediaTimingFunction_class/Introduction/Introduction.html#//apple_ref/doc/c_ref/kCAMediaTimingFunctionDefault">here</a>). This bit of Obj-C prints them out.</p>
+        <script src="https://gist.github.com/simonwhitaker/356845.js"></script>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
