@@ -20,7 +20,6 @@
     #clock {
       position: relative;
       width: 100%;
-      padding-bottom: 100%;
       pointer-events: none;
     }
     #clock > img {
@@ -46,13 +45,21 @@
       font-size: large;
       margin: 5px;
     }
+    #clockFaceRoman {
+      display: none;
+    }
+    #clockFace {
+      display: block;
+    }
+    #faces > div {
+      position: absolute;
+    }
     @media only screen and (max-width: 480px) {
       body {
         width: 100%;
       }
       #clock {
         width: 70%;
-        padding-bottom: 70%;
         margin: 0 auto;
       }
       #clock > img {
@@ -72,6 +79,14 @@
   <script>
     var answerIndex = -1;
     var score = 0;
+    var faceIndex = 1;
+
+    function toggleFace() {
+      const facesContainer = document.getElementById('faces');
+      facesContainer.children[faceIndex].style.display = "none";
+      faceIndex = (faceIndex + 1) % facesContainer.children.length;
+      facesContainer.children[faceIndex].style.display = "block";
+    }
 
     function timeAsHumanString(t) {
       if (t.minute === 0) {
@@ -156,8 +171,12 @@
     <h1>What time is it?</h1>
     <p class="blurb">How high can you score? One wrong answer sets the score back to zero!!</p>
     <div id="scoreContainer">Score: <span id="score">0</span></div>
+    <button id="toggleFace" onclick="toggleFace();">Change Face</button>
     <div id="clock">
-      <img id="clockFace" src="clock-face.png"/>
+      <div id="faces">
+        <img id="clockFaceRoman" src="clock-face-roman.png"/>
+        <img id="clockFace" src="clock-face.png"/>
+      </div>
       <img id="minuteHand" src="minute-hand.png" />
       <img id="hourHand" src="hour-hand.png" />
     </div>
