@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOCAL_PATH=www
+LOCAL_PATH=www/
 REMOTE_HOST=netcetera.org
 REMOTE_PATH=netcetera.org
 
