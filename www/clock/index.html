@@ -45,7 +45,7 @@
       font-size: large;
       margin: 5px;
     }
-    #clockFaceRoman {
+    #faces > img + img {
       display: none;
     }
     #clockFace {
@@ -79,7 +79,7 @@
   <script>
     var answerIndex = -1;
     var score = 0;
-    var faceIndex = 1;
+    var faceIndex = 0;
 
     function toggleFace() {
       const facesContainer = document.getElementById('faces');
@@ -174,8 +174,9 @@
     <button id="toggleFace" onclick="toggleFace();">Change Face</button>
     <div id="clock">
       <div id="faces">
-        <img id="clockFaceRoman" src="clock-face-roman.png"/>
-        <img id="clockFace" src="clock-face.png"/>
+        <img src="clock-face.png"/>
+        <img src="clock-face-roman.png"/>
+        <img src="clock-face-to-past.png"/>
       </div>
       <img id="minuteHand" src="minute-hand.png" />
       <img id="hourHand" src="hour-hand.png" />
