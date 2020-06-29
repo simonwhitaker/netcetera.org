@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Times Table Dice!</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #dies {
+            font-size: 3rem;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        }
+        .inline {
+            display: inline-block;
+            border-radius: 3px;
+            padding: 0.5rem 1rem;
+        }
+        .die {
+            background-color: #aaa;
+        }
+        #result {
+            background-color: #393
+        }
+    </style>
+    <script>
+        function roll() {
+            const params = new URLSearchParams(window.location.search);
+            const multiplier = parseInt(params.get('table') || '4');
+            const validVals = [1,2,3,4,5,6].map(x => x * multiplier).join(', ');
+
+            document.getElementById('multiplier').innerText = multiplier;
+            document.getElementById('valid-values').innerText = validVals;
+
+            const d1 = (Math.floor(Math.random() * 6) + 1) * multiplier;
+            const d2 = (Math.floor(Math.random() * 6) + 1) * multiplier;
+            document.getElementById('d1').innerText = d1;
+            document.getElementById('d2').innerText = d2;
+            document.getElementById('result').innerText = d1 + d2;
+        }
+    </script>
+</head>
+<body onload="roll()">
+    <p>
+        These dice are like normal dice, but each side is multiplied by <span id="multiplier"></span>!
+    </p>
+    <p>
+        So instead of [1, 2, 3, 4, 5, 6] the values you can throw with a single dice are: [<strong><span id="valid-values"></span></strong>]
+    </p>
+    <div id="dies">
+        <div class="inline die" id="d1"></div> +
+        <div class="inline die" id="d2"></div> =
+        <div class="inline result" id="result"></div>
+    </div>
+</body>
+</html>
