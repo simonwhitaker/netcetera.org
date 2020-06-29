@@ -8,6 +8,10 @@
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+        }
+        body>div {
+            padding: 1rem;
         }
         #dies {
             font-size: 3rem;
@@ -17,6 +21,8 @@
             display: inline-block;
             border-radius: 3px;
             padding: 0.5rem 1rem;
+            min-width: 3rem;
+            text-align: center;
         }
         .die {
             background-color: #aaa;
@@ -28,15 +34,30 @@
             padding: 1rem;
             font-size: large;
         }
+        #nav {
+            background-color: #ddd;
+        }
+        #nav a, #nav a:visited {
+            color: #444;
+        }
     </style>
     <script>
-        function roll() {
+        function getMultiplier() {
             const params = new URLSearchParams(window.location.search);
-            const multiplier = parseInt(params.get('table') || '4');
-            const validVals = [1,2,3,4,5,6].map(x => x * multiplier).join(', ');
+            return parseInt(params.get('table') || '2');
+        }
+
+        function init() {
+            const multiplier = getMultiplier();
+            const validValues = [1,2,3,4,5,6].map(x => x * multiplier).join(', ');
 
             document.getElementById('multiplier').innerText = multiplier;
-            document.getElementById('valid-values').innerText = validVals;
+            document.getElementById('valid-values').innerText = validValues;
+            roll();
+        }
+
+        function roll() {
+            const multiplier = getMultiplier();
 
             const d1 = (Math.floor(Math.random() * 6) + 1) * multiplier;
             const d2 = (Math.floor(Math.random() * 6) + 1) * multiplier;
@@ -47,19 +68,35 @@
     </script>
 </head>
 <body onload="roll()">
-    <p>
-        These dice are like normal dice, but each side is multiplied by <span id="multiplier"></span>!
-    </p>
-    <p>
-        So instead of [1, 2, 3, 4, 5, 6] the values you can throw with a single dice are: [<strong><span id="valid-values"></span></strong>]
-    </p>
-    <div id="dies">
-        <div class="inline die" id="d1"></div> +
-        <div class="inline die" id="d2"></div> =
-        <div class="inline result" id="result"></div>
+    <div id="nav">
+        <a href="?table=2">2x table</a> |
+        <a href="?table=3">3x table</a> |
+        <a href="?table=4">4x table</a> |
+        <a href="?table=5">5x table</a> |
+        <a href="?table=6">6x table</a> |
+        <a href="?table=7">7x table</a> |
+        <a href="?table=8">8x table</a> |
+        <a href="?table=9">9x table</a> |
+        <a href="?table=10">10x table</a> |
+        <a href="?table=11">11x table</a> |
+        <a href="?table=12">12x table</a>
     </div>
-    <p>
-        <button class="action" onClick="roll()">Roll again</button>
-    </p>
+    <div id="content">
+        <h1>Times Table Dice!</h1>
+        <p>
+            These dice are like normal dice, but each side is multiplied by <span id="multiplier"></span>!
+        </p>
+        <p>
+            So instead of [1, 2, 3, 4, 5, 6] the values you can throw with a single dice are: [<strong><span id="valid-values"></span></strong>]
+        </p>
+        <div id="dies">
+            <div class="inline die" id="d1"></div> +
+            <div class="inline die" id="d2"></div> =
+            <div class="inline result" id="result"></div>
+        </div>
+        <p>
+            <button class="action" onClick="roll()">Roll again</button>
+        </p>
+    </div>
 </body>
 </html>
