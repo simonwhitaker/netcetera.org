@@ -24,6 +24,10 @@
         #result {
             background-color: #393
         }
+        button.action {
+            padding: 1rem;
+            font-size: large;
+        }
     </style>
     <script>
         function roll() {
@@ -54,5 +58,8 @@
         <div class="inline die" id="d2"></div> =
         <div class="inline result" id="result"></div>
     </div>
+    <p>
+        <button class="action" onClick="roll()">Roll again</button>
+    </p>
 </body>
 </html>
