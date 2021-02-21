@@ -14,22 +14,25 @@
         padding: 0;
         margin: 0;
         width: 100%;
+        background-color: black;
+        color: white;
       }
       #content {
         width: 800px;
         margin: 20px auto;
       }
-      #bingo {
-        width: 800px;
-        height: 720px;
-        border-collapse: collapse;
-      }
-
       h1 {
         text-align: center;
         letter-spacing: 1rem;
         font-weight: 900;
         font-family: "Helvetica Neue";
+      }
+
+      #bingo {
+        width: 800px;
+        height: 720px;
+        border-collapse: collapse;
+        margin-bottom: 20px;
       }
       input[type="button"] {
         font-size: 1.2rem;
@@ -37,25 +40,29 @@
       td {
         padding: 5px;
       }
-      td > div {
-        background-color: #ddd;
-        color: #bbb;
+
+      .ball {
         text-align: center;
         font-size: 1.6rem;
         border-radius: 40px;
-        width: 70px;
-        height: 70px;
-        line-height: 70px;
-      }
+        width: 66px;
+        height: 66px;
+        line-height: 66px;
 
+        border: 2px solid #444;
+        background-color: black;
+        color: #777;
+      }
       .latest {
+        border: 2px solid yellow;
         background-color: green;
         color: yellow;
       }
       .picked {
-        background-color: #333;
-        color: #777;
+        background-color: #444;
+        color: #222;
       }
+
       input[type="button"].destructive {
         color: red;
       }
@@ -65,13 +72,15 @@
     <div id="content">
       <h1>BINGO</h1>
       <table id="bingo"></table>
-      <input type="button" onclick="nextBall()" value="Next ball [SPACE]" />
-      <input
-        type="button"
-        class="destructive"
-        onclick="newGame()"
-        value="New Game"
-      />
+      <div id="buttons">
+        <input type="button" onclick="nextBall()" value="Next ball [SPACE]" />
+        <input
+          type="button"
+          class="destructive"
+          onclick="newGame()"
+          value="New Game"
+        />
+      </div>
     </div>
   </body>
 
