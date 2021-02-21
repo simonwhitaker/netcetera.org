@@ -1,139 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bingo!</title>
-  <style>
-    * {
-      font-family: Helvetica, Arial, sans-serif
-    }
-    body {
-      border: 0;
-      padding: 0;
-      margin: 0;
-      width: 100%;
-    }
-    #content {
-      width: 800px;
-      margin: 20px auto;
-    }
-    #bingo {
-      width: 800px;
-      height: 720px;
-      border-collapse: collapse;
-    }
-
-    h1 {
-      text-align: center;
-      letter-spacing: 1rem;
-      font-weight: 900;
-      font-family: "Helvetica Neue";
-    }
-    input[type=button] {
-      font-size: 1.2rem;
-    }
-    td {
-      padding: 5px;
-    }
-    td > div {
-      background-color: #ddd;
-      color: #bbb;
-      text-align: center;
-      font-size: 1.6rem;
-      border-radius: 40px;
-      width: 70px;
-      height: 70px;
-      line-height: 70px;
-    }
-
-    .latest {
-      background-color: green;
-      color: yellow;
-    }
-    .picked {
-      background-color: #333;
-      color: #777;
-    }
-    input[type=button].destructive {
-      color: red;
-    }
-  </style>
-</head>
-<body>
-  <div id="content">
-    <h1>BINGO</h1>
-    <table id="bingo"></table>
-    <input type="button" onclick="nextBall()" value="Next ball [SPACE]" />
-    <input type="button" class="destructive" onclick="newGame()" value="New Game" />
-  </div>
-</body>
-
-<script>
-  const BALL_CLASS = 'ball';
-  let lastPickedNumber = 0;
-  let numbers = [...Array(91).keys()].slice(1);
-  shuffleArray(numbers);
-
-  document.body.onload = () => {
-    const table = document.getElementById('bingo');
-    for (let row = 0; row < 9; row++) {
-      const tr = document.createElement('tr');
-      for (let col = 0; col < 10; col++) {
-        const td = document.createElement('td');
-        const div = document.createElement('div');
-        const n = row * 10 + col + 1;
-        div.innerHTML = n;
-        div.id = id(n);
-        div.className = BALL_CLASS;
-        td.appendChild(div);
-        tr.appendChild(td);
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bingo!</title>
+    <style>
+      * {
+        font-family: Helvetica, Arial, sans-serif;
       }
-      table.appendChild(tr);
-    }
-  }
-
-  document.addEventListener('keydown', (event) => {
-    if (event.keyCode == 32) {
-      nextBall();
-    }
-  });
-
-  function nextBall() {
-    if (numbers.length > 0) {
-      const n = numbers.pop();
-      document.getElementById(id(n)).classList.add('latest');
-      if (lastPickedNumber > 0) {
-        document.getElementById(id(lastPickedNumber)).classList.remove('latest');
-        document.getElementById(id(lastPickedNumber)).classList.add('picked');
+      body {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        width: 100%;
       }
-      lastPickedNumber = n;
-    }
-  }
+      #content {
+        width: 800px;
+        margin: 20px auto;
+      }
+      #bingo {
+        width: 800px;
+        height: 720px;
+        border-collapse: collapse;
+      }
 
-  function newGame() {
-    numbers = [...Array(91).keys()].slice(1);
+      h1 {
+        text-align: center;
+        letter-spacing: 1rem;
+        font-weight: 900;
+        font-family: "Helvetica Neue";
+      }
+      input[type="button"] {
+        font-size: 1.2rem;
+      }
+      td {
+        padding: 5px;
+      }
+      td > div {
+        background-color: #ddd;
+        color: #bbb;
+        text-align: center;
+        font-size: 1.6rem;
+        border-radius: 40px;
+        width: 70px;
+        height: 70px;
+        line-height: 70px;
+      }
+
+      .latest {
+        background-color: green;
+        color: yellow;
+      }
+      .picked {
+        background-color: #333;
+        color: #777;
+      }
+      input[type="button"].destructive {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <h1>BINGO</h1>
+      <table id="bingo"></table>
+      <input type="button" onclick="nextBall()" value="Next ball [SPACE]" />
+      <input
+        type="button"
+        class="destructive"
+        onclick="newGame()"
+        value="New Game"
+      />
+    </div>
+  </body>
+
+  <script>
+    const BALL_CLASS = "ball";
+    let lastPickedNumber = 0;
+    let numbers = [...Array(91).keys()].slice(1);
     shuffleArray(numbers);
 
-    const balls = document.getElementsByClassName(BALL_CLASS);
-    for (const ball of balls) {
-      ball.classList.remove('latest','picked');
-    }
-    lastPickedNumber = 0;
-  }
+    document.body.onload = () => {
+      const table = document.getElementById("bingo");
+      for (let row = 0; row < 9; row++) {
+        const tr = document.createElement("tr");
+        for (let col = 0; col < 10; col++) {
+          const td = document.createElement("td");
+          const div = document.createElement("div");
+          const n = row * 10 + col + 1;
+          div.innerHTML = n;
+          div.id = id(n);
+          div.className = BALL_CLASS;
+          td.appendChild(div);
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      }
+    };
 
-  function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
-    }
-  }
+    document.addEventListener("keydown", (event) => {
+      if (event.keyCode == 32) {
+        nextBall();
+      }
+    });
 
-  function id(number) {
-    return `cell${number}`;
-  }
-</script>
+    function nextBall() {
+      if (numbers.length > 0) {
+        const n = numbers.pop();
+        document.getElementById(id(n)).classList.add("latest");
+        if (lastPickedNumber > 0) {
+          document
+            .getElementById(id(lastPickedNumber))
+            .classList.remove("latest");
+          document.getElementById(id(lastPickedNumber)).classList.add("picked");
+        }
+        lastPickedNumber = n;
+      }
+    }
+
+    function newGame() {
+      numbers = [...Array(91).keys()].slice(1);
+      shuffleArray(numbers);
+
+      const balls = document.getElementsByClassName(BALL_CLASS);
+      for (const ball of balls) {
+        ball.classList.remove("latest", "picked");
+      }
+      lastPickedNumber = 0;
+    }
+
+    function shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+    }
+
+    function id(number) {
+      return `cell${number}`;
+    }
+  </script>
 </html>
